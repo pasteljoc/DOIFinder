@@ -46,10 +46,14 @@ def crossrefAPI(title):
     strURL = "https://api.crossref.org/works?query.bibliographic="
     r=requests.get(url=strURL+title)
     data=r.json()
-    crDOI=data["message"]["items"][0]["DOI"]
-    crURL=data["message"]["items"][0]["URL"]
-    crTitle=data["message"]["items"][0]["title"][0]
-    crSimi=similar(depuText(title),depuText(crTitle))
+    try:
+        crDOI=data["message"]["items"][0]["DOI"]
+        crURL=data["message"]["items"][0]["URL"]
+        crTitle=data["message"]["items"][0]["title"][0]
+        crSimi=similar(depuText(title),depuText(crTitle))
+    except:
+        crDOI=crURL=crTitle="hay problemas con el texto del título"
+        crSimi=0.0
     return crDOI,crURL,crTitle,crSimi
 
 filePath=os.getcwd()+"\\"

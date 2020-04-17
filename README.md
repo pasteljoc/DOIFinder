@@ -1,5 +1,5 @@
 # Crossref.org DOI Finder
-This script was meant to collect DOI numbers form a set of articles title provider in a single row Ms Excel (.xlsx) datasheet. Outputs are the DOI number, URL and title found by the first result of a search in the crossreff.org web page.
+This script was meant to collect DOI numbers form a set of titles of research articles contained in a single row Ms Excel (.xlsx) datasheet. Outputs are the DOI number, URL and title found by the first result of a search in the crossreff.org browser.
 
 How to use:
 1. Prepare you input data set. This must be an .xlsx datasheet with only one column containing all articles title listed one below other.

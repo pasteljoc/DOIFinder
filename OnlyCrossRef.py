@@ -3,6 +3,9 @@ import os
 import csv
 from datetime import datetime
 
+from unidecode import unidecode
+import string
+
 import pandas as pd
 
 from difflib import SequenceMatcher
@@ -11,6 +14,11 @@ import requests
 
 def similar(a,b):
     return SequenceMatcher(None,a,b).ratio()
+
+def depuText(text):
+    text=unidecode(text)
+    text=text.translate(str.maketrans('','',string.punctuation))
+    return text.lower()
 
 # Función para mostrar una barra de progreso
 def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
@@ -30,7 +38,7 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
     print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = printEnd)
-    # Print New Line on Complete
+    # Imprime la nueva línea al terminar
     if iteration == total: 
         print()
 
@@ -41,7 +49,7 @@ def crossrefAPI(title):
     crDOI=data["message"]["items"][0]["DOI"]
     crURL=data["message"]["items"][0]["URL"]
     crTitle=data["message"]["items"][0]["title"][0]
-    crSimi=similar(title,crTitle)
+    crSimi=similar(depuText(title),depuText(crTitle))
     return crDOI,crURL,crTitle,crSimi
 
 filePath=os.getcwd()+"\\"
@@ -56,7 +64,7 @@ try:
         timeStamp=str(datetime.now().timestamp())
         fileOutput=timeStamp[-6:].replace(".","")+fileName[:fileName.find('.')].upper()+'.csv'
         
-        with open(fileOutput, 'w', newline='') as file:
+        with open(fileOutput, 'w', newline='',encoding='utf-8') as file:
             writer = csv.writer(file, delimiter=";")
             writer.writerow(["TituloOriginal", "CrossRefDOI","CrossRefURL", "CrossRefTitulo","CrossRefSimilaridad"])
             # inicializa la barra de progreso
